@@ -1,2 +1,2 @@
-# AAP-Av.cont
-Avaliação continua para a cadeira AAP
+# AAB-Av.cont
+Avaliação continua para a cadeira AAB
