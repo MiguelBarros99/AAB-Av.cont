@@ -11,49 +11,49 @@ class Trie:
             print (k, "->" , self.nodes[k]) 
     
     def add_node(self, origin, symbol):
-        self.num += 1
-        self.nodes[origin][symbol] = self.num
-        self.nodes[self.num] = {}
+        self.num += 1  # adicionar o numero do nodulo, adiciona sempre um que corre
+        self.nodes[origin][symbol] = self.num #adicionar a info ao node
+        self.nodes[self.num] = {} #abre o nome nodulo
     
-    def add_pattern(self, p):
-        pos = 0
-        node = 0
+    def add_pattern(self, p): #p -> padrão, inicia sempre apartir da root
+        pos = 0 #posição
+        node = 0 #node
         while pos < len(p):
-            if p[pos] not in self.nodes[node].keys():
-                self.add_node(node, p[pos])
-            node = self.nodes[node][p[pos]]
+            if p[pos] not in self.nodes[node].keys(): # verifica a presença da letra(nucleotido) no node a ser chamado
+                self.add_node(node, p[pos])  #self.add_note para adicionar
+            node = self.nodes[node][p[pos]] #o node que tem a letras atraves do dicionario
             pos += 1
 
             
     def trie_from_patterns(self, pats):
-     for p in pats:
+     for p in pats: # um padrão da lista de padrões
          self.add_pattern(p)
             
-    def prefix_trie_match(self, text):
+    def prefix_trie_match(self, text): #começa da posiçao 0
         pos = 0
-        match = ""
+        match = "" #resultado
         node = 0
         while pos < len(text):
             if text[pos] in self.nodes[node].keys():
-                node = self.nodes[node][text[pos]]
+                node = self.nodes[node][text[pos]] # passar para o proximo node _ output é um numero
                 match += text[pos]
                 if self.nodes[node]== {}: return match
                 else:pos +=1
-            else:
+            else: #senao ticer corre o ciclo e devolve none
                 return None
         return None
         
     def trie_matches(self, text):
         res = []
-        for i in range(len(text)):
+        for i in range(len(text)): # i vai ser a posição na sequencia text
             m= self.prefix_trie_match(text[i:])
-            if m !=None : res.append((i,m))
+            if m != None : res.append((i,m))
         return res
         
           
 def test():
     patterns = ["GAT", "CCT", "GAG"]
-    t = Trie()
+    t = Trie() # chamar a classe
     t.trie_from_patterns(patterns)
     t.print_trie()
 
@@ -65,8 +65,8 @@ def test2():
     print (t.prefix_trie_match("GAGATCCTA"))
     print (t.trie_matches("GAGATCCTA"))
     
-test()
-print()
+#test()
+#print()
 test2()
 
 
