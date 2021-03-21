@@ -39,8 +39,8 @@ class SuffixTree:
 #       pos = 0
         node = 0
         for pos in range(len(pattern)):
-            if pattern[pos] in self.nodes[node][1].keys():
-                node=self.nodes[node][1][pattern[pos]]
+            if pattern[pos] in self.nodes[node][1].keys():  # se a letra tiver nas keys
+                node=self.nodes[node][1][pattern[pos]] #seguir para o proximo node
             else: return None
         return self.get_leafes_below(node)
 
@@ -114,7 +114,7 @@ def test2():
     st = SuffixTree()
     st.suffix_tree_from_seq(seq)
     #print(st.get_sequence())
-    #print(st.nodes)
+    print(st.nodes)
     #print (st.find_pattern("TA"))
     #print(st.repeats(2,2))
     print(st.matches_prefix("TA"))
