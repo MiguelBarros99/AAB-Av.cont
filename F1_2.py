@@ -144,7 +144,7 @@ class SuffixTree2:
                             if count > f_count:
                                 f_match = match
                                 f_count = count
-                            p = 0
+                            p = 0 #terminar o ciclo while
         return f_match
 
 def test2():
