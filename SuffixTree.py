@@ -65,7 +65,7 @@ class SuffixTree:
         else: return None
 
     def matches_prefix (self, prefix):
-        """Ficha exercicio B"""
+        """Ficha exercicio 1 B"""
         res = []
         pos = self.find_pattern(prefix)  # local onde é encontrado o sufixo
         orig = self.get_sequence()  #sequencia original
@@ -98,7 +98,7 @@ class SuffixTree:
                     sequence += letra
                     if self.nodes[node][0] != -1: #se for o esterisco e se o proximo nodulo é uma leaf
                         p = 0
-        return sequence[:len(sequence)-1]
+        return sequence[:len(sequence)-1]  #devolver a seq final a retirar o $ ou #
 
 
 def test():

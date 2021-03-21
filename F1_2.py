@@ -66,7 +66,7 @@ class SuffixTree2:
 
     def get_leafes_below(self, node):
         res = []
-        m,n = self.descompact(node)
+        m,n = self.descompact(node) #desconcatenar os tuplos
         if m >= 0:  # maior ou igual 0 é para verificar uma leaf
             res.append((m,n))  # adicionar o valor da leaf
         else:
@@ -76,14 +76,14 @@ class SuffixTree2:
                 res.extend(leafes)  # concatenar a lista da recursiva
         return res
 
-    def get_coords(self):
+    def get_coords(self): #obter as coords dos ultimos pontos
         res= []
         x = len(self.nodes)-1
         p = 1
         while p != 0 and x != 0:
             if self.nodes[x][0]!= -1:
                 m,n = self.descompact(x)
-                if m == 0 and n == 0:
+                if m == 0 and n == 0: #sequencia 0 na intereção 0
                     res.append(x)
             x -= 1
         x = len(self.nodes)-1
@@ -91,60 +91,65 @@ class SuffixTree2:
         while p != 0 and x != 0:
             if self.nodes[x][0] != -1:
                 m, n = self.descompact(x)
-                if m == 0 and n == 1:
+                if m == 0 and n == 1: #sequencia 0 na intereção 0
                     res.append(x)
             x -= 1
         return res
 
     def get_sequence(self):
-        s1 = ''
+        s1 = '' #abrir a construção de sequencias
         s2 = ''
-        seq1, seq2 = self.get_coords()
+        seq1, seq2 = self.get_coords() #coordenadas dos nodulos iniciais
         x = seq1
         while x > 0:
-            l,y = self.find_node(x)
-            s1 = l + s1
-            x = y
+            l,y = self.find_node(x)  #encontrar o nodulo de onde veio e prosseguir ate o node 0
+            s1 = l + s1 # adiciona a letra a seq em construção
+            x = y # redefinir o x para o nodulo anterior
         x = seq2
         while x > 0:
-            l, y = self.find_node(x)
-            s2 = l + s2
-            x = y
+            l, y = self.find_node(x) #encontrar o nodulo de onde veio e prosseguir ate o node 0
+            s2 = l + s2 # adiciona a letra a seq em construção
+            x = y # redefinir o x para o nodulo anterior
         return s1,s2
 
     def find_node(self,coord):  # encontrar o nodulo anterior
         x = len(self.nodes) - 1
         p = 1
-        while p != 0 and x >= 0: #ciclo do while para correr os nodes e procurar qual o node e a letra associada aoa seguimento para o proximo node
+        while p != 0 and x >= 0:  #ciclo do while para correr os nodes e procurar qual o node e a letra associada aoa seguimento para o proximo node
             for i in self.nodes[x][1].keys():
                 if self.nodes[x][1][i] == coord:
                     p = 0
                     k = i,x
             x -=1
-        return k
+        return k  #decolve a letra associada e o node
 
     def largestCommonSubstring (self):
         f_match = ''
         f_count = 0
-        s1,s2 = self.get_sequence()
-        for i in s1:
-            count = 0
-            match = ''
-            for l in s2:
-                if i == l:
-                    match += i
-                    count += 1
-                else:
-                    if count > f_count:
-                        f_match = match
-                        f_count = count
-                    match = ''
-                    count = 0
+        s1,s2 = self.get_sequence()  #obter as sequencias iniciais
+        for i in range(len(s1)): #correr em for a s1 e a s2
+            for l in range(len(s1)):
+                count = 0
+                match = ''
+                if s1[i] == s2[l]: #quando haver match
+                    p = 1
+                    x, y = i , l
+                    while p!= 0: #abro ciclo de while para correr separadamente e obter o max de substring
+                        if s1[x] == s2[y]:
+                            match += s1[x]
+                            count += 1
+                            x += 1
+                            y += 1
+                        else: #quando houver diferenças verificar se é uma substring maior e substituir
+                            if count > f_count:
+                                f_match = match
+                                f_count = count
+                            p = 0
         return f_match
 
 def test2():
-    seq1 = "GGGGGGGGGGGGGGHLDHOFOIGJKCTA"
-    seq2 = "TAAGGGGGGGGGGGGGGHLDHOFOIGJKCTA"
+    seq1 = "GADGGFGGGGGGGGGHLDHOFOIGJKCTA"
+    seq2 = "TAAGADGGFGGGGGGGGGHLDHOFOIGJKCTA"
     st = SuffixTree2()
     st.suffix_tree_from_seq(seq1,seq2)
     #print(st.get_coords())
