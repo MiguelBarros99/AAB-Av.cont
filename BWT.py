@@ -8,28 +8,27 @@ class BWT:
     def set_bwt(self, bw):
         self.bwt = bw
 
-    def build_bwt(self, text, buildsufarray=False):
+    def build_bwt(self, text, buildsufarray=False): #construir o bwt para rodar a string
         ls = []
-        for i in range(len(text)):
+        for i in range(len(text)): #dollar ja na sequencia
             ls.append(text[i:] + text[:i])
-        ls.sort()
-        # print(ls)
+        ls.sort() #sorted por ordem alfabetica
         res = ""
         for i in range(len(text)):
             res += ls[i][len(text) - 1]  # Percorrer a lista e para cada string vai buscar o último elemento da string
         if buildsufarray:
             self.sa = []
             for i in range(len(ls)):
-                stpos = ls[i].index("$")
+                stpos = ls[i].index("$") #indexação em relação ao $ para poder reconstruir
                 self.sa.append(len(text) - stpos - 1)
         return res
 
     def inverse_bwt(self):
         firstcol = self.get_first_col()
         res = ""
-        c = "$"
-        occ = 1
-        for i in range(len(self.bwt)):
+        c = "$" # o primeiro carater é sempre $
+        occ = 1 # chamar a primeira ocorrencia
+        for i in range(len(self.bwt)): #percorre a matriz, o comprimento da bwt
             pos = find_ith_occ(self.bwt, c, occ)
             c = firstcol[pos]
             occ = 1
@@ -42,9 +41,9 @@ class BWT:
 
     def get_first_col(self):
         firstcol = []
-        for c in self.bwt:
+        for c in self.bwt: # vai à bwt e guarda a primeira coluna
             firstcol.append(c)
-        firstcol.sort()
+        firstcol.sort() #ordena por ordem alfabetica
         return firstcol
 
     def last_to_first(self):
@@ -52,7 +51,7 @@ class BWT:
         firstcol = self.get_first_col()
         for i in range(len(firstcol)):
             c = self.bwt[i]
-            ocs = self.bwt[:i].count(c) + 1
+            ocs = self.bwt[:i].count(c) + 1 #conta ocorrencias
             res.append(find_ith_occ(firstcol, c, ocs))
         return res
 
