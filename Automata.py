@@ -14,9 +14,9 @@ class Automata:
             for a in self.alphabet:
                 prefixo = pattern[:q] + a
                 p = overlap(prefixo ,pattern)
-                self.transitionTable[(q,a)] = p
+                self.transitionTable[(q,a)] = p #p - posição no padrao e o q posição na sequencia
        
-    def printAutomata(self):
+    def printAutomata(self): #print da informação da classe
         print ("States: " , self.numstates)
         print ("Alphabet: " , self.alphabet)
         print ("Transition table:")
@@ -38,10 +38,10 @@ class Automata:
         q = 0 
         res = []
         for i in range(len(text)):
-            q = self.nextState(q, text[i])
+            q = self.nextState(q, text[i])  #correr o nextstsate
             if q == self.numstates -1:
-                res.append(i - self.numstates + 2)
-        return res
+                res.append(i - self.numstates + 2) #2 e um para ter o espaço que adicionamos(inicio do state) mais ter o comprimento da sequencia
+        return res # a lista é as pisiçoes onde se encontram os padroes
 
 def overlap(s1, s2):
     maxov = min(len(s1), len(s2))
@@ -52,8 +52,8 @@ def overlap(s1, s2):
 def test():
     auto = Automata("AC", "ACA")
     auto.printAutomata()
-    print (auto.applySeq("CACAACAA"))
-    print (auto.occurencesPattern("CACAACAA"))
+    print (auto.applySeq("CACAACAA")) #lista com sequencias posição do padrao na sequencia
+    print (auto.occurencesPattern("CACAACAA")) #local de ocorrencia do padrao completo
 
 test()
 
