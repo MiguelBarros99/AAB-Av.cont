@@ -62,6 +62,7 @@ def test2():
     patterns = ["AGAGAT", "AGC", "AGTCC", "CAGAT", "CCTA", "GAGAT", "GAT", "TC"]
     t = Trie()
     t.trie_from_patterns(patterns)
+    print(t.nodes)
     print (t.prefix_trie_match("GAGATCCTA"))
     print (t.trie_matches("GAGATCCTA"))
     

@@ -36,7 +36,6 @@ class SuffixTree:
             self.add_suffix(t[i:], i)  #range para passar a seq de i ao fim e apartir de que posição foi passada
             
     def find_pattern(self, pattern):
-#       pos = 0
         node = 0
         for pos in range(len(pattern)):
             if pattern[pos] in self.nodes[node][1].keys():  # se a letra tiver nas keys
@@ -50,7 +49,7 @@ class SuffixTree:
             res.append(self.nodes[node][0])  # adicionar o valor da leaf
         else:
             for k in self.nodes[node][1].keys(): # correr todas as keys no nodulo
-                newnode = self.nodes[node][1][k] #mudar para o node
+                newnode = self.nodes[node][1][k] # mudar para o node
                 leafes = self.get_leafes_below(newnode)  #recursividade para seguir os ramos ate leaf
                 res.extend(leafes) #concatenar a lista da recursiva
         return res
@@ -71,9 +70,9 @@ class SuffixTree:
         orig = self.get_sequence()  #sequencia original
         if pos != [] or None:
             for i in pos:
-                hipoteses = len(orig) - i  #numero de hipoteses
+                hipoteses = len(orig) - i  #numero de hipoteses (compriemnto maximo)
                 dist = len(prefix)
-                while dist <= hipoteses:  #distâncias
+                while dist <= hipoteses:  # distâncias
                     if orig[i:i+dist] not in res:
                         res.append(orig[i:i+dist])
                     dist += 1
@@ -81,7 +80,7 @@ class SuffixTree:
 
 
     def get_sequence(self):
-        """Funçao suporte a matches :prefix, obter a sequencia original de inicio da arvore"""
+        """Funçao suporte a matches_prefix, obter a sequencia original de inicio da arvore"""
         sequence = ''
         m = self.nodes[0][1].keys() #nodulo da root
         for i in m:

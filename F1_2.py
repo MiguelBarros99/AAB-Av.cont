@@ -91,7 +91,7 @@ class SuffixTree2:
         while p != 0 and x != 0:
             if self.nodes[x][0] != -1:
                 m, n = self.descompact(x)
-                if m == 0 and n == 1: #sequencia 0 na intereção 0
+                if m == 0 and n == 1: #sequencia 1 na intereção 0
                     res.append(x)
             x -= 1
         return res
@@ -154,7 +154,7 @@ def test2():
     st.suffix_tree_from_seq(seq1,seq2)
     #print(st.get_coords())
     #st.print_tree()
-    #print(st.nodes)
+    print(st.nodes)
     #print(len(st.nodes))
     #print(st.find_pattern("TAC"))
     # print(st.repeats(2,2))
