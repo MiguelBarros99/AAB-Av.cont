@@ -73,15 +73,15 @@ class Popul:
 
     def recombination(self, parents, noffspring):#nooffspring = quantas novas solucoes queremos gerar a partir da populacao existente
         offspring = []
-        new_inds = 0#inicializacao de novos individuos
+        new_inds = 0 #inicializacao de novos individuos
         while new_inds < noffspring:
-            parent1 = self.indivs[parents[new_inds]]#ir buscar um progenitor 1 aos individuos
-            parent2 = self.indivs[parents[new_inds+1]]#ir buscar um progenitor 2 aos individuos
-            offsp1, offsp2 = parent1.crossover(parent2)#fazer o cruzamento entre o progenitor 1 e 2
-            offsp1.mutation()#aplica mutacao a nova geracao
-            offsp2.mutation()#aplica mutacao a nova geracao
-            offspring.append(offsp1)#adicionar a lista de novos descendentes
-            offspring.append(offsp2)#adicionar a lista de novos descendentes
+            parent1 = self.indivs[parents[new_inds]] #ir buscar um progenitor 1 aos individuos
+            parent2 = self.indivs[parents[new_inds+1]] #ir buscar um progenitor 2 aos individuos
+            offsp1, offsp2 = parent1.crossover(parent2) #fazer o cruzamento entre o progenitor 1 e 2
+            offsp1.mutation() #aplica mutacao a nova geracao
+            offsp2.mutation() #aplica mutacao a nova geracao
+            offspring.append(offsp1) #adicionar a lista de novos descendentes
+            offspring.append(offsp2) #adicionar a lista de novos descendentes
             new_inds += 2
         return offspring
 
@@ -105,9 +105,9 @@ class PopulInt(Popul):
 
     def initRandomPop(self):
         self.indivs = []
-        for _ in range(self.popsize):#quantidade de listas a gerar
-            indiv_i = IndivInt(self.indsize, [], 0, self.ub)#diferenca IndivInt #gerar os individuos aleatoriamente (n de elemntos, lista)
-            self.indivs.append(indiv_i)#adicionar os individuos a lista
+        for _ in range(self.popsize): #quantidade de listas a gerar
+            indiv_i = IndivInt(self.indsize, [], 0, self.ub) #diferenca IndivInt #gerar os individuos aleatoriamente (n de elemntos, lista)
+            self.indivs.append(indiv_i) #adicionar os individuos a lista
 
 
 class PopulReal(Popul):
