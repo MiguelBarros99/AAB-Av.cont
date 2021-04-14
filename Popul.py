@@ -113,9 +113,13 @@ class PopulInt(Popul):
 class PopulReal(Popul):
 
     def __init__(self, popsize, indsize, lb=0.0, ub=1.0, indivs=[]):
-        # completar
-        pass
+        self.lb = lb
+        self.ub = ub
+        PopulInt.__init__(self, popsize, indsize, indivs)
 
     def initRandomPop(self):
-        # completar
+        self.indivs = []
+        for _ in range(self.popsize):
+            indiv_i = IndivReal(self.indsize, [], lb=self.lb, ub=self.ub)
+            self.indivs.append(indiv_i)
         pass
