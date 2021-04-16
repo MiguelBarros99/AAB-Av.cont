@@ -40,15 +40,13 @@ class EAMotifsInt (EvolAlgorithm):
 
 class EAMotifsReal (EvolAlgorithm):
     def __init__(self, popsize, numits, noffspring, filename):
-        self.motifs = MotifFinding()
+        self.motifs_finding = MotifFinding()
         self.motifs.readFile(filename, "dna")
         indsize = self.motifs.motifSize * len(self.motifs.alphabet)
         EvolAlgorithm.__init__(self, popsize, numits, noffspring, indsize)
 
     def initPopul(self, indsize):
-        maxvalue = self.motifs.seqSize(0) - self.motifs.motifSize
-        self.popul = PopulReal(self.popsize, indsize,
-                              maxvalue, [])
+        self.popul = PopulReal(self.popsize, indsize, indivs=[], lb = 0.0, ub = 1.0)
 
     def vec_to_pwm(self,v):
         n_alph = len(self.motifs.alphabet)
@@ -78,13 +76,16 @@ class EAMotifsReal (EvolAlgorithm):
         for i in range(len(indivs)):
             ind = indivs[i]
             sol = ind.getGenes()
-            self.motifs.pwm = self.vec_to_pwm(sol)
+            #criar motifs
+            pwm = self.vec_to_pwm(sol)
+            mtf = MyMotifs(pwm = pwm, alphabet = self.motifs_finding.alphabet)
             s = []
-            for seq in self.motifs.seqs:
+            for j in range(len(self.motifs_finding.seqs)):
+                seq = self.motifs_finding.seqs[j].seq
                 p = self.motifs.mostProbableSeq(seq)
                 s.append(p)
-            ## TPC - ussar score multiplicativo sem atualizar a PWM ##
-            fit = self.motifs.score(sol)
+            # TPC - usar score multiplicativo sem atualizar a PWM ##
+            fit = self.motifs_finding.score(sol)
             ind.setFitness(fit)
 
 def test1():
