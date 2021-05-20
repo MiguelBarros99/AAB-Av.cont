@@ -321,6 +321,86 @@ class MyGraph:
             ck[k] = float(tot) / len(degs_k[k])
         return ck
 
+    # Eulerian
+
+    def check_balanced_node(self,node):  # vai ver se o node é balanceado se o numero de entradas for igual ao numero de saidas
+        return self.in_degree(node) == self.out_degree(node)
+
+    def check_balanced_graph(self):  # vai ver se o grafo é balanceado EM TODOS OS NOS
+        for n in self.graph.keys():
+            if not self.check_balanced_node(n): return False
+        return True
+
+    def check_nearly_balanced_graph(self):  # vai encontrar quase um grapho balanceado sendo que pode ocorrer apensas 2 vértices um comuma diferença de in out de 1 e outro com uma de -1
+        res = None, None
+        for n in self.graph.keys():
+            indeg = self.in_degree(n)
+            outdeg = self.out_degree(n)
+            if indeg - outdeg == 1 and res[1] is None:
+                res = res[0], n
+            elif indeg - outdeg == -1 and res[0] is None:
+                res = n, res[1]
+            elif indeg == outdeg:
+                pass
+            else:
+                return None, None
+        return res
+
+    def is_connected(self):  # vai ver se todos os vértices do grafo estão conectados a partir de qualquer vértice
+        total = len(self.graph.keys()) - 1
+        for v in self.graph.keys():
+            reachable_v = self.reachable_bfs(v)
+            if (len(reachable_v) < total): return False
+        return True
+
+    def eulerian_cycle(self):
+        from random import randint
+        if not self.is_connected() or not self.check_balanced_graph(): return None
+        edges_visit = list(self.get_edges()) # Vai recolher as ligações existentes
+        vi = edges_visit[randint(0,len(edges_visit)-1)] # escolher aleatóriamente um caminho
+        res = [vi] #adiciona à lista de resultados o caminho inicial
+        edges_visit.pop(edges_visit.index(vi)) #retira da lista de caminho o selecionado
+        match = False # verificar se existe outros caminhos quando o ciclo terminar
+        while edges_visit:
+            for i in edges_visit: # correr todos os caminhos existentes
+                if i[0] == vi[1]: # verificar a ligação do selecionado com outro caminho
+                    vi = i #definir o proximo caminho
+                    res.append(vi) #adicionar o novo caminho à lista
+                    edges_visit.pop(edges_visit.index(vi)) #retirar o novo caminho
+                    break
+            for h in edges_visit:
+                if vi[1] == h[0]: #verificar se um caminho alternativo
+                    match = False # caso exista segue
+                    break
+                else:
+                    match = True
+            if match == True and edges_visit != []: #caso existam caminhos restantes e não ocorra match entre caminhos
+                for j in edges_visit:
+                    for m in res:
+                        if j[0] == m[0]: # encontrar caminhos alternativos a partir de um vertice
+                            pos = res.index(m) #verifcar a posição do caminho onde se encontra esse vertice
+                            newpath = res[pos:] # reorganizar os caminhos começando naquele com caminhos alternativos
+                            newpath.extend(res[:pos]) # adicionar os caminhos que se encontravam antes do caminho selecionado
+                            res = newpath #definir a nossa lista de caminhos por aquela reorganizada
+                            vi = res[len(res)-1] # definir o nosso novo caminho, sendo esse caminho o ultimo da lista
+                            match = False
+                            break
+        path = [] #lista que vai guardar os primeiros vertices de cada caminho
+        for k in res:
+            path.append(k[0]) #adiciona o vertice à lista
+        path.append(res[-1][1]) #adiciona o vertice final que corresponde ao local onde se iniciou o ciclo
+        return path
+
+    def eulerian_path(self):  # vamos criar um eurelian path para um grapho quase balanceado
+        unb = self.check_nearly_balanced_graph()
+        if unb[0] is None or unb[1] is None: return None
+        self.graph[unb[1]].append(unb[0])  # criar um caminho de um vértice ao outro para ficarem balanceados
+        cycle = self.eulerian_cycle()
+        for i in range(len(cycle) - 1):
+            if cycle[i] == unb[1] and cycle[i + 1] == unb[0]:
+                break
+        path = cycle[i+1:] + cycle[1:i+1]
+        return path
 
 def is_in_tuple_list(tl, val):
     res = False
