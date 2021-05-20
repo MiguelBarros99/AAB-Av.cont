@@ -356,32 +356,32 @@ class MyGraph:
     def eulerian_cycle(self):
         from random import randint
         if not self.is_connected() or not self.check_balanced_graph(): return None
-        edges_visit = list(self.get_edges()) # Vai recolher as ligações existentes
-        vi = edges_visit[randint(0,len(edges_visit)-1)] # escolher aleatóriamente um caminho
-        res = [vi] #adiciona à lista de resultados o caminho inicial
-        edges_visit.pop(edges_visit.index(vi)) #retira da lista de caminho o selecionado
+        edges_visit = list(self.get_edges()) # Cria uma lista com todos os Nodes-ligação
+        vi = edges_visit[randint(0,len(edges_visit)-1)] # escolhe aleatoriamente um node
+        res = [vi] #adiciona à lista o node inicial
+        edges_visit.pop(edges_visit.index(vi)) #retira da lista de caminho o selecionado (pop list) edges_visit.index(vi), numero do local
         match = False # verificar se existe outros caminhos quando o ciclo terminar
         while edges_visit:
             for i in edges_visit: # correr todos os caminhos existentes
-                if i[0] == vi[1]: # verificar a ligação do selecionado com outro caminho
+                if i[0] == vi[1]: # verificar se node destino i[0] = node inicial vi[0]
                     vi = i #definir o proximo caminho
-                    res.append(vi) #adicionar o novo caminho à lista
-                    edges_visit.pop(edges_visit.index(vi)) #retirar o novo caminho
-                    break
-            for h in edges_visit:
-                if vi[1] == h[0]: #verificar se um caminho alternativo
+                    res.append(vi) #adicionar o novo caminho à lista Node-ligação (o novo vi)
+                    edges_visit.pop(edges_visit.index(vi)) #retirar o caminho adicionado
+                    break #parar ciclo for
+            for h in edges_visit: #edges_visit agora sem o vi
+                if vi[1] == h[0]: #verificar se existe outro caminho alternativo
                     match = False # caso exista segue
                     break
                 else:
                     match = True
-            if match == True and edges_visit != []: #caso existam caminhos restantes e não ocorra match entre caminhos
+            if match == True and edges_visit != []: #caso existam caminhos (nodes-caminho) restantes e não ocorra match entre caminhos
                 for j in edges_visit:
                     for m in res:
-                        if j[0] == m[0]: # encontrar caminhos alternativos a partir de um vertice
+                        if j[0] == m[0]: # encontrar caminhos alternativos, j[0](node em falta) == m[0]
                             pos = res.index(m) #verifcar a posição do caminho onde se encontra esse vertice
                             newpath = res[pos:] # reorganizar os caminhos começando naquele com caminhos alternativos
                             newpath.extend(res[:pos]) # adicionar os caminhos que se encontravam antes do caminho selecionado
-                            res = newpath #definir a nossa lista de caminhos por aquela reorganizada
+                            res = newpath # definir a nossa lista de caminhos por aquela reorganizada
                             vi = res[len(res)-1] # definir o nosso novo caminho, sendo esse caminho o ultimo da lista
                             match = False
                             break
