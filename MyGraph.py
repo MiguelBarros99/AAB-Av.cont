@@ -242,12 +242,12 @@ class MyGraph:
         for s in self.graph.keys(): 
             for t in self.graph.keys():
                 if s != t and s != node and t != node:
-                    sp = self.shortest_path(s, t)#retorna os caminhos dos nos de s a t
+                    sp = self.shortest_path(s, t)#retorna os nodes entre s a t no caminho + curto
                     if sp is not None:# ou seja, se existir um caminho
                         total_sp += 1 #somar 1 aos caminhos todos que existem
-                        if node in sp: # se  node se encontrar no sp
+                        if node in sp: #adicionar 1 se o node estiver no caminho entre s e t
                             sps_with_node += 1 #
-        return sps_with_node / total_sp #caminhos curtos que passam pelo node/ caminhos curtos totais
+        return sps_with_node / total_sp #caminhos que passam pelo node/ caminhos totais
 
     def highest_betweenness(self, top = 10):
         '''Centralidade mais alta -> top 10'''
