@@ -89,8 +89,8 @@ class MyGraph:
         ''' Computes the degree (of a given type) for all nodes.
         deg_type can be "in", "out", or "inout" '''
         degs = {}
-        for v in self.graph.keys(): #para cada no
-            if deg_type == "out" or deg_type == "inout": #para cada sucessor
+        for v in self.graph.keys():
+            if deg_type == "out" or deg_type == "inout":
                 degs[v] = len(self.graph[v])
             else: degs[v] = 0
         if deg_type == "in" or deg_type == "inout":
@@ -166,7 +166,7 @@ class MyGraph:
         return None
         
     def shortest_path(self, s, d):
-        if s == d: return 0
+        if s == d: return []
         l = [(s,[])]
         visited = [s]
         while len(l) > 0:
@@ -214,7 +214,6 @@ class MyGraph:
         cc = {}
         for k in self.graph.keys():
             cc[k] = self.closeness_centrality(k)
-        print(cc)
         ord_cl = sorted(list(cc.items()), key=lambda x : x[1], reverse = True)
         return list(map(lambda x:x[0], ord_cl[:top]))
             
@@ -289,6 +288,134 @@ class MyGraph:
             ck[k] = float(tot) / len(degs_k[k])
         return ck
 
+    ## Hamiltonian
+
+    def check_if_valid_path(self, p):
+        if p[0] not in self.graph.keys(): return False
+        for i in range(1,len(p)):
+            if p[i] not in self.graph.keys() or p[i] not in self.graph[p[i-1]]:
+                return False
+        return True
+        
+    def check_if_hamiltonian_path(self, p):
+        if not self.check_if_valid_path(p): return False
+        to_visit = list(self.get_nodes())
+        if len(p) != len(to_visit): return False
+        for i in range(len(p)):
+            if p[i] in to_visit: to_visit.remove(p[i])
+            else: return False
+        if not to_visit: return True
+        else: return False
+    
+    def search_hamiltonian_path(self):
+        for ke in self.graph.keys():
+            p = self.search_hamiltonian_path_from_node(ke)
+            if p != None:
+                return p
+        return None
+    
+    def search_hamiltonian_path_from_node(self, start):
+        current = start
+        visited = {start:0}
+        path = [start]
+        while len(path) < len(self.get_nodes()):
+            nxt_index = visited[current]
+            if len(self.graph[current]) > nxt_index:
+                nxtnode = self.graph[current][nxt_index]
+                visited[current] += 1
+                if nxtnode not in path:
+                    path.append(nxtnode)
+                    visited[nxtnode] = 0                    
+                    current = nxtnode      
+            else: 
+                if len(path) > 1: 
+                    rmvnode = path.pop()
+                    del visited[rmvnode]
+                    current = path[-1]
+                else: return None
+        return path
+
+    # Eulerian
+
+    def check_balanced_node(self,node):  # vai ver se o node é balanceado se o numero de entradas for igual ao numero de saidas
+        return self.in_degree(node) == self.out_degree(node)
+
+    def check_balanced_graph(self):  # vai ver se o grafo é balanceado EM TODOS OS NOS
+        for n in self.graph.keys():
+            if not self.check_balanced_node(n): return False
+        return True
+
+    def check_nearly_balanced_graph(self):  # vai encontrar quase um grapho balanceado sendo que pode ocorrer apensas 2 vértices um comuma diferença de in out de 1 e outro com uma de -1
+        res = None, None
+        for n in self.graph.keys():
+            indeg = self.in_degree(n)
+            outdeg = self.out_degree(n)
+            if indeg - outdeg == 1 and res[1] is None:
+                res = res[0], n
+            elif indeg - outdeg == -1 and res[0] is None:
+                res = n, res[1]
+            elif indeg == outdeg:
+                pass
+            else:
+                return None, None
+        return res
+
+    def is_connected(self):  # vai ver se todos os vértices do grafo estão conectados a partir de qualquer vértice
+        total = len(self.graph.keys()) - 1
+        for v in self.graph.keys():
+            reachable_v = self.reachable_bfs(v)
+            if (len(reachable_v) < total): return False
+        return True
+
+    def eulerian_cycle(self):
+        from random import randint
+        if not self.is_connected() or not self.check_balanced_graph(): return None
+        edges_visit = list(self.get_edges()) # Cria uma lista com todos os Nodes-ligação
+        vi = edges_visit[randint(0,len(edges_visit)-1)] # escolhe aleatoriamente um node
+        res = [vi] #adiciona à lista o node inicial
+        edges_visit.pop(edges_visit.index(vi)) #retira da lista de caminho o selecionado (pop list) edges_visit.index(vi), numero do local
+        match = False # verificar se existe outros caminhos quando o ciclo terminar
+        while edges_visit:
+            for i in edges_visit: # correr todos os caminhos existentes
+                if i[0] == vi[1]: # verificar se node destino i[0] = node inicial vi[0]
+                    vi = i #definir o proximo caminho
+                    res.append(vi) #adicionar o novo caminho à lista Node-ligação (o novo vi)
+                    edges_visit.pop(edges_visit.index(vi)) #retirar o caminho adicionado
+                    break #parar ciclo for
+            for h in edges_visit: #edges_visit agora sem o vi
+                if vi[1] == h[0]: #verificar se existe outro caminho alternativo
+                    match = False # caso exista segue
+                    break
+                else:
+                    match = True
+            if match == True and edges_visit != []: #caso existam caminhos (nodes-caminho) restantes e não ocorra match entre caminhos
+                for j in edges_visit:
+                    for m in res:
+                        if j[0] == m[0]: # encontrar caminhos alternativos, j[0](node em falta) == m[0]
+                            pos = res.index(m) #verifcar a posição do caminho onde se encontra esse vertice
+                            newpath = res[pos:] # reorganizar os caminhos começando naquele com caminhos alternativos
+                            newpath.extend(res[:pos]) # adicionar os caminhos que se encontravam antes do caminho selecionado
+                            res = newpath # definir a nossa lista de caminhos por aquela reorganizada
+                            vi = res[len(res)-1] # definir o nosso novo caminho, sendo esse caminho o ultimo da lista
+                            match = False
+                            break
+        path = [] #lista que vai guardar os primeiros vertices de cada caminho
+        for k in res:
+            path.append(k[0]) #adiciona o vertice à lista
+        path.append(res[-1][1]) #adiciona o vertice final que corresponde ao local onde se iniciou o ciclo
+        return path
+
+    def eulerian_path(self):  # vamos criar um eurelian path para um grapho quase balanceado
+        unb = self.check_nearly_balanced_graph()
+        if unb[0] is None or unb[1] is None: return None
+        self.graph[unb[1]].append(unb[0])  # criar um caminho de um vértice ao outro para ficarem balanceados
+        cycle = self.eulerian_cycle()
+        for i in range(len(cycle) - 1):
+            if cycle[i] == unb[1] and cycle[i + 1] == unb[0]:
+                break
+        path = cycle[i+1:] + cycle[1:i+1]
+        return path
+
 
 def is_in_tuple_list(tl, val):
     res = False
@@ -296,8 +423,67 @@ def is_in_tuple_list(tl, val):
         if val == x: return True
     return res
 
+
+def test1():
+    gr = MyGraph( {1:[2], 2:[3], 3:[2,4], 4:[2]} )
+    gr.print_graph()
+    print (gr.get_nodes())
+    print (gr.get_edges())
     
-if __name__ == "__main__":
+
+def test2():
+    gr2 = MyGraph()
+    gr2.add_vertex(1)
+    gr2.add_vertex(2)
+    gr2.add_vertex(3)
+    gr2.add_vertex(4)
+    
+    gr2.add_edge(1,2)
+    gr2.add_edge(2,3)
+    gr2.add_edge(3,2)
+    gr2.add_edge(3,4)
+    gr2.add_edge(4,2)
+    
+    gr2.print_graph()
+  
+def test3():
+    gr = MyGraph( {1:[2], 2:[3], 3:[2,4], 4:[2]} )
+    gr.print_graph()
+
+    print (gr.get_successors(2))
+    print (gr.get_predecessors(2))
+    print (gr.get_adjacents(2))
+    print (gr.in_degree(2))
+    print (gr.out_degree(2))
+    print (gr.degree(2))
+
+def test4():
+    gr = MyGraph( {1:[2], 2:[3], 3:[2,4], 4:[2]} )
+    print (gr.shortest_path(1,4))
+    print (gr.shortest_path(4,3))
+
+    print (gr.reachable_with_dist(1))
+    print (gr.reachable_with_dist(3))
+
+    
+    gr2 = MyGraph( {1:[2,3], 2:[4], 3:[5], 4:[], 5:[]} )
+    print (gr2.shortest_path(1,5))
+    print (gr2.shortest_path(2,1))
+
+    print (gr2.reachable_with_dist(1))
+    print (gr2.reachable_with_dist(5))
+
+def test5():
+    gr = MyGraph( {1:[2], 2:[3], 3:[2,4], 4:[2]} )
+    print (gr.node_has_cycle(2))
+    print (gr. node_has_cycle(1))
+    print (gr.has_cycle())
+
+    gr2 = MyGraph( {1:[2,3], 2:[4], 3:[5], 4:[], 5:[]} )
+    print (gr2. node_has_cycle(1))
+    print (gr2.has_cycle())
+
+def test6():
     gr = MyGraph()
     gr.add_vertex(1)
     gr.add_vertex(2)
@@ -344,3 +530,13 @@ if __name__ == "__main__":
     print(gr.mean_distances())
     print (gr.clustering_coef(1))
     print (gr.clustering_coef(2))
+
+if __name__ == "__main__":
+    #test1()
+    #test2()
+    #test3()
+    test4()
+    #test5()
+    #test6()
+    
+    

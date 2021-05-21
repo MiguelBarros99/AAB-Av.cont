@@ -24,11 +24,11 @@ class DeBruijnGraph (MyGraph):
 
     def create_deBruijn_graph(self, frags):
         for seq in frags:
-            suf = suffix(seq)
+            suf = suffix(seq)  # Vamos criar o sufixo da seq e adicionala como um vértice
             self.add_vertex(suf)
-            pref = prefix(seq)
+            pref = prefix(seq)  # criar o prefixo da seq e adicionala como vértice
             self.add_vertex(pref)
-            self.add_edge(pref, suf)
+            self.add_edge(pref, suf)  # e depois vamos criar a ligação entre o prefixo e o sufixo
 
     def seq_from_path(self, path):
         seq = path[0]
@@ -69,7 +69,12 @@ def test2():
 def test3():
     orig_sequence = "ATGCAATGGTCTG"
     frags = composition(3, orig_sequence)
-    # ... completar
+    dbgr = DeBruijnGraph(frags)
+    dbgr.print_graph()
+    print(dbgr.check_nearly_balanced_graph())
+    p = dbgr.eulerian_path()
+    print(p)
+    print(dbgr.seq_from_path(p))
 
 
 
@@ -77,5 +82,5 @@ test1()
 print()
 #test2()
 #print()
-#test3()
+test3()
     

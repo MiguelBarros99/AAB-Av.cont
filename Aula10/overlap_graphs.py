@@ -4,29 +4,31 @@ from MyGraph import MyGraph
 
 class OverlapGraph(MyGraph):
     
-    def __init__(self, frags):
-        MyGraph.__init__(self, {})
-        self.create_overlap_graph(frags)
+    #def __init__(self, frags):
+    #    MyGraph.__init__(self, {})
+    #    self.create_overlap_graph(frags)
 
-    def __init__(self, frags, reps = False):
-        if reps: self.create_overlap_graph_with_reps(frags)
-        else: self.create_overlap_graph(frags)
+    def __init__(self, frags, reps=False):
+        MyGraph.__init__(self, {})
+        if reps:
+            self.create_overlap_graph_with_reps(frags)
+        else:
+            self.create_overlap_graph(frags)
         self.reps = reps
-        
-    
-    ## create overlap graph from list of sequences (fragments)
-    def create_overlap_graph(self, frags):  #pode haver repetições
-        ## add vertices
+
+## create overlap graph from list of sequences (fragments)
+    def create_overlap_graph(self, frags):  # vai cirar o grafo a partir das ligações do sufixos com os prefixos
+        # add vertices
         for seq in frags:
             self.add_vertex(seq)
-        ## add edges
+        # add edges
         for seq in frags:
             suf = suffix(seq)
-        for seq2 in frags:
-            if prefix(seq2) == suf:
-                self.add_edge(seq, seq2)
-        
-    def create_overlap_graph_with_reps(self, frags):  # caso de replicas de fragmentos
+            for seq2 in frags:
+                if prefix(seq2) == suf:
+                    self.add_edge(seq, seq2)
+
+    def create_overlap_graph_with_reps(self,frags):  # caso de replicas de fragmentos #REPETIÇÃO CASO EXISTA REPETIÇÃO DE ELEMENTOS
         idnum = 1
         for seq in frags:
             self.add_vertex(seq + "-" + str(idnum))
@@ -52,15 +54,16 @@ class OverlapGraph(MyGraph):
         else: return node
     
     def seq_from_path(self, path):
-        if not self.check_if_hamiltonian_path(path): return None
+        if not self.check_if_hamiltonian_path(path):
+            return None
         seq = self.get_seq(path[0])
         for i in range(1, len(path)):
             nxt = self.get_seq(path[i])
-        seq += nxt[-1]
+            seq += nxt[-1]
         return seq
-   
-                    
-# auxiliary
+
+
+    # auxiliary
 def composition(k, seq):
     res = []
     for i in range(len(seq)-k+1):
@@ -121,11 +124,11 @@ def test6():
     print (path)
     print (ovgr.seq_from_path(path))
    
-#test1()
-#print()
-#test2()
-#print()
-test3()
+test1()
+print()
+test2()
+print()
+#test3()
 #print()
 #test4()
 #print()
