@@ -4,8 +4,7 @@
 """
 
 
-def createMatZeros(nl,
-                   nc):  # função que vai criar uma matriz de 0, com o temanho de nl * nc dependendo dos valores dados nestas variáveis
+def createMatZeros(nl,nc):  # função que vai criar uma matriz de 0, com o temanho de nl * nc dependendo dos valores dados nestas variáveis
     res = []
     for i in range(0, nl):
         res.append([0] * nc)
@@ -17,7 +16,6 @@ def printMat(mat):  # função responsável por dar print a matriz, neste caso v
 
 
 class MyMotifs:
-
     def __init__(self, seqs):  # calsse recebe sempre uma lista de seq
         self.size = len(seqs[0])  # comprimentos de caractares das seq
         self.seqs = seqs  # objetos classe MySeq/ vai ser a nossa lista de seqs
