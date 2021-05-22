@@ -10,7 +10,7 @@ class BWT:
 
     def build_bwt(self, text, buildsufarray=False): #construir o bwt para rodar a string
         ls = []
-        for i in range(len(text)): #dollar ja na sequencia
+        for i in range(len(text)): #dollar ja incluido na sequencia
             ls.append(text[i:] + text[:i])
         ls.sort() #sorted por ordem alfabetica
         res = ""
@@ -27,8 +27,8 @@ class BWT:
         firstcol = self.get_first_col()
         res = ""
         c = "$" # o primeiro carater é sempre $
-        occ = 1 # chamar a primeira ocorrencia
-        for i in range(len(self.bwt)): #percorre a matriz, o comprimento da bwt
+        occ = 1 # buscar a primeira ocorrencia
+        for i in range(len(self.bwt)): #percorre a matriz, no comprimento da bwt
             pos = find_ith_occ(self.bwt, c, occ)
             c = firstcol[pos]
             occ = 1
@@ -41,9 +41,9 @@ class BWT:
 
     def get_first_col(self):
         firstcol = []
-        for c in self.bwt: # vai à bwt e guarda a primeira coluna
+        for c in self.bwt: # na bwt pega na primeira coluna e guarda-a
             firstcol.append(c)
-        firstcol.sort() #ordena por ordem alfabetica
+        firstcol.sort() #ordena segundo a ordem alfabetica
         return firstcol
 
     def last_to_first(self):

@@ -40,7 +40,7 @@ class Trie:
                     return match
                 else:
                     pos += 1
-            else:  # senao ticer corre o ciclo e devolve none
+            else:  # senao tiver corre o ciclo e devolve none
                 return None
         return None
 

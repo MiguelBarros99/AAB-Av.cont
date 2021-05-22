@@ -17,7 +17,7 @@ class BoyerMoore:
         for c in self.alphabet:  # adiciona ao dicionario todas as letras do alphabeto com valor -1
             self.occ[c] = -1
         for i in range(len(self.pattern)):
-            c = self.pattern[i]  # altera no dicionario a letra no pattern para valor i
+            c = self.pattern[i]  # altera no dicionario a letra no pattern para valor de i
             self.occ[c] = i
 
     def process_gsr(self):
@@ -25,11 +25,10 @@ class BoyerMoore:
         self.f = [0] * (len(self.pattern) + 1)  # abrir uma lista com o 0 com o tamanho do pattern
         self.s = [0] * (len(self.pattern) + 1)
         i = len(self.pattern)
-        j = len(self.pattern) + 1  # define o i e j com pelo comprimento do padrão
+        j = len(self.pattern) + 1  # define o i e j como pelo comprimento do padrão
         self.f[i] = j  # altera o ultimo elemento da lista f para o valor de f
         while i > 0:
-            while j <= len(self.pattern) and self.pattern[i - 1] != self.pattern[
-                j - 1]:  # define a lista s, lista que significa o numero de casas que pdoe avançar caso não encaixe no pattern
+            while j <= len(self.pattern) and self.pattern[i - 1] != self.pattern[j - 1]:  # vai definir lista s, em S que significa o numero de casas que podesse avançar caso não encaixe no pattern
                 if self.s[j] == 0:
                     self.s[j] = j - i
                 j = self.f[j]

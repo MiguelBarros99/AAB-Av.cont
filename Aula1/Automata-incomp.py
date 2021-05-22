@@ -14,9 +14,9 @@ class Automata:
             for a in self.alphabet:
                 prefixo = pattern[:q] + a
                 p = overlap(prefixo, pattern)
-                self.transitionTable[(q, a)] = p  # p - posição no padrao e o q posição na sequencia
+                self.transitionTable[(q, a)] = p  # p - posição no padrao    q - posição na sequencia
 
-    def printAutomata(self):  # print da informação da classe
+    def printAutomata(self):  # imprime a informação da classe
         print("States: ", self.numstates)
         print("Alphabet: ", self.alphabet)
         print("Transition table:")
@@ -38,11 +38,9 @@ class Automata:
         q = 0
         res = []
         for i in range(len(text)):
-            q = self.nextState(q, text[i])  # correr o nextstsate
-            if q == self.numstates - 1:
-                res.append(
-                    i - self.numstates + 2)  # 2 e um para ter o espaço que adicionamos(inicio do state) mais ter o comprimento da sequencia
-        return res  # a lista é as pisiçoes onde se encontram os padroes
+            q = self.nextState(q, text[i])  # correr o nextstate
+            if q == self.numstates - 1: res.append(i - self.numstates + 2)  # 2 e um para ter o espaço que adicionamos(inicio do state) mais ter o comprimento da sequencia
+        return res  # a lista é as posiçoes onde se encontram os padroes
 
 
 def overlap(s1, s2):

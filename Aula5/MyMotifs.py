@@ -4,25 +4,24 @@
 """
 
 
-def createMatZeros(nl,nc):  # função que vai criar uma matriz de 0, com o temanho de nl * nc dependendo dos valores dados nestas variáveis
+def createMatZeros(nl,nc):  # matriz de 0, com o temanho de nl * nc
     res = []
     for i in range(0, nl):
         res.append([0] * nc)
     return res
 
 
-def printMat(mat):  # função responsável por dar print a matriz, neste caso vai dar print lista a lista dentro da matriz
+def printMat(mat):  # função responsável por dar print a matriz
     for i in range(0, len(mat)): print(mat[i])
 
 
 class MyMotifs:
-    def __init__(self, seqs):  # calsse recebe sempre uma lista de seq
+    def __init__(self, seqs):  #  lista de seq
         self.size = len(seqs[0])  # comprimentos de caractares das seq
-        self.seqs = seqs  # objetos classe MySeq/ vai ser a nossa lista de seqs
-        self.alphabet = seqs[
-            0].alfabeto()  # vai a classe myseq chamar a função alfabeto, para dar return de um tipo de alfabeto
-        self.doCounts()  # criar a matriz de contagens das letras entre as seqs
-        self.createPWM()  # criar a matriz de PWM, que é a matriz de probabilidades
+        self.seqs = seqs  # lista de seqs
+        self.alphabet = seqs[0].alfabeto()  # alfabeto
+        self.doCounts()  # matriz de contagens das letras entre as seqs
+        self.createPWM()  # matriz de PWM, que é a matriz de probabilidades
 
     def __len__(self):  # return do comprimento das seqs
         return self.size
@@ -41,7 +40,7 @@ class MyMotifs:
             for j in range(self.size):
                 self.pwm[i][j] = float(self.counts[i][j]) / len(self.seqs)
 
-    def consensus(self):  # vai procurar o consensus na matriz dos counts por coluna
+    def consensus(self):  # obter consensus na matriz dos counts por coluna
         res = ""
         for j in range(self.size):
             maxcol = self.counts[0][j]
@@ -53,7 +52,7 @@ class MyMotifs:
             res += self.alphabet[maxcoli]
         return res
 
-    def maskedConsensus(self):  # vai procurar o masked consensus que é a consensus mas só com as letras que tem uma incidência maior do que 50% em todas as seqs
+    def maskedConsensus(self):  # obtem o masked consensus,consensus só com as letras que tem uma incidência maior do que 50%
         res = ""
         for j in range(self.size):
             maxcol = self.counts[0][j]
@@ -68,7 +67,7 @@ class MyMotifs:
                 res += "-"
         return res
 
-    def probabSeq(self, seq):  # vai calcular a probabilidade de a seq fazer parte deste quadro
+    def probabSeq(self, seq):  # probabilidade de a seq fazer parte deste quadro
         res = 1.0
         for i in range(self.size):
             lin = self.alphabet.index(seq[i])
@@ -81,7 +80,7 @@ class MyMotifs:
             res.append(self.probabSeq(seq))
         return res
 
-    def mostProbableSeq(self,seq):  # vai ver qual a posição inicial da subseq de uma seq de comprimento indefenido encaixa melhor no quandro de motifs das seqs
+    def mostProbableSeq(self,seq):  #
         maximo = -1.0
         maxind = -1
         for k in range(len(seq) - self.size):

@@ -8,31 +8,28 @@ class SuffixTree:
 
     def print_tree(self):
         for k in self.nodes.keys():
-            if self.nodes[k][0] < 0:
-                print(k, "->", self.nodes[k][1])
-            else:
-                print(k, ":", self.nodes[k][0])
+            if self.nodes[k][0] < 0: print(k, "->", self.nodes[k][1])
+            else: print(k, ":", self.nodes[k][0])
 
     def add_node(self, origin, symbol, leafnum=-1):
         self.num += 1  # numero de nodulo adiciona
         self.nodes[origin][1][symbol] = self.num  # 1 é para ir buscar o dicionario dentro do tuplo
-        self.nodes[self.num] = (leafnum, {})  # construi o tuplo para o node a seguir
+        self.nodes[self.num] = (leafnum, {})  # constroi tuplo para o node seguinte
 
     def add_suffix(self, p, sufnum):  # o -padrao , sufnum - i
         pos = 0
         node = 0
         while pos < len(p):  # seguir a sequencia no ciclo pos
-            if p[pos] not in self.nodes[node][
-                1].keys():  # se a letra na posição pos da seq p não tiver no dicionario no node
+            if p[pos] not in self.nodes[node][1].keys():  # se a letra na posição pos da seq p não tiver no dicionario no node
                 if pos == len(p) - 1:
-                    self.add_node(node, p[pos], sufnum)  # adicionar o node final/leaf se for o $.
+                    self.add_node(node, p[pos], sufnum)  # adiciona o node final/leaf se for o $.
                 else:
                     self.add_node(node, p[pos])  # adicionar ao node a letra p[pos]
             node = self.nodes[node][1][p[pos]]  # mudar de node, output é um numero
-            pos += 1  # avançar uma posição
+            pos += 1  # avança uma posição
 
     def suffix_tree_from_seq(self, text):
-        t = text + "$"  # adiciona dollar a seq
+        t = text + "$"  # adiciona dollar á seq
         for i in range(len(t)):
             self.add_suffix(t[i:], i)  # range para passar a seq de i ao fim e apartir de que posição foi passada
 
@@ -60,9 +57,7 @@ class SuffixTree:
         """Ficha exercicio 1 A"""
         nodes = list(self.nodes[node][1].values())  # vai buscar os valores do dicionario dos nodulos a seguir
         if nodes != []:
-            for i in nodes:
-                nodes.extend(list(self.nodes[i][
-                                      1].values()))  # a lista vai aumentando (acrescenta a lista) conforme ele corre os nodulos
+            for i in nodes: nodes.extend(list(self.nodes[i][1].values()))  # a lista vai aumentando (acrescenta a lista) conforme ele corre os nodulos
             return nodes
         else:
             return None
