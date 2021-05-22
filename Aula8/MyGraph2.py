@@ -137,6 +137,8 @@ class MyGraph:
             return None
 
     def shortest_path(self, s, d):  #algoritmo de djiskra
+        res = []
+        bwg = 9999
         if s == d:
             return [s, d]
         else:
@@ -144,18 +146,22 @@ class MyGraph:
             vis = [s]  # a lista do resultado de nos atingiveis
             while len(l) > 0:  # enquanto ha elementos na lista l (lista de queue)
                 node, preds, swg = l.pop(0)  # isolar o 1º no na queue
-                bwg = 999999
                 for elem in self.graph[node]:  # correr os nos no node a pesquisar
                     nwnode, wg = elem
                     if nwnode == d:
-                        return preds + [(node, nwnode)] , swg+wg
-                    if wg < bwg:
-                        bwg = wg
-                        nxnode = nwnode
-                if nxnode not in vis and nxnode not in l and nxnode != node:  # adicionar á queue
-                    l.append((nxnode, [preds + (node, nxnode)], swg + bwg))
-                    vis.append(node)
-            return None
+                        res.append(preds + [(node, nwnode)] , swg+wg)
+                        break
+                    if nwnode not in vis and nwnode not in l and nwnode != node:  # adicionar á queue
+                        l.append((nwnode, [preds + (node, nwnode)], swg + bwg))
+                        vis.append(node)
+            for i in res:
+                preds, swg = res[i]
+                if swg < bwg:
+                    best_path = preds
+                    bwg = swg
+            return best_path, bwg
+
+
 
     def reachable_with_dist(self,s):  # travessia total do grafo mas com as distancias associadas, faz a travessia sobre todos os pontos
         res = []
