@@ -25,8 +25,7 @@ class MetabolicNetwork(MyGraph):  # sub-classe da classe MyGraph (herança)-> de
 
     def get_nodes_type(self, node_type):  # obter o tipo de nós
         if node_type in self.node_types:  # ver todos os nós no dicionario
-            return self.node_types[
-                node_type]  # dar todos os values do nó, ou seja, todos os arcos/ligações entre aquele nó e outros nós
+            return self.node_types[node_type]  # dar todos os values do nó, ou seja, todos os arcos/ligações entre aquele nó e outros nós
         else:
             return None
 

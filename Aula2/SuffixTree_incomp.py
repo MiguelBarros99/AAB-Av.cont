@@ -118,6 +118,6 @@ def test2():
     print(st.matches_prefix("TA"))
 
 
-# test()
+test()
 print()
 test2()
