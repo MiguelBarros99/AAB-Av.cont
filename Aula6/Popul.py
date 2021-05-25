@@ -70,8 +70,7 @@ class Popul:
         # (1-1)/(4-1) = 0.0 ! (2-1)/(4-1)=0.33 |...
         # res = [0.0, 0.3333333333333333, 0.6666666666666666, 1.0]
 
-    def recombination(self, parents,
-                      noffspring):  # nooffspring = quantas novas solucoes queremos gerar a partir da populacao existente
+    def recombination(self, parents, noffspring):  # nooffspring = quantas novas solucoes queremos gerar a partir da populacao existente
         offspring = []
         new_inds = 0  # inicializacao de novos individuos
         while new_inds < noffspring:
@@ -85,8 +84,7 @@ class Popul:
             new_inds += 2
         return offspring
 
-    def reinsertion(self,
-                    offspring):  # mecanismo de reinsercao -> selecao dos individuos que vao constituir a populacao OU iteracao seguinte
+    def reinsertion(self, offspring):  # mecanismo de reinsercao -> selecao dos individuos que vao constituir a populacao OU iteracao seguinte
         # offspring = descendentes
         # Exemplo= tenho uma pop com 100 individuos
         # quero 50 descendentes mas para completar a geracao seguinte ainda me faltam 50, ENTAO faco a selecao(roleta)

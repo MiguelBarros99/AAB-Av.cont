@@ -5,8 +5,8 @@ class EvolAlgorithm:
 
     def __init__(self, popsize, numits, noffspring, indsize):
         self.popsize = popsize
-        self.numits = numits
-        self.noffspring = noffspring
+        self.numits = numits #numero de gerações
+        self.noffspring = noffspring  #geração atual
         self.indsize = indsize
 
     def initPopul(self, indsize):

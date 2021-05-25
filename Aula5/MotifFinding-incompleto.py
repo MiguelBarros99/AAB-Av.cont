@@ -8,7 +8,7 @@ from random import random
 class MotifFinding:
 
     def __init__(self, size=8, seqs=None):
-        self.motifSize = size  # definir o tamanho dos motifs a procurar (8 por default)
+        self.motifSize = size  # tamanho dos motifs a procurar (8 por default)
         if (seqs != None):  # se seqs é definido constroi o self.seqs e self.alphabet
             self.seqs = seqs
             self.alphabet = seqs[0].alfabeto()
@@ -39,9 +39,9 @@ class MotifFinding:
 
     def score(self, s):
         score = 0
-        motif = self.createMotifFromIndexes(s)
+        motif = self.createMotifFromIndexes(s)  #usa cada um dos indexs para criar os motifs
         motif.doCounts()  # gera matriz de contagens
-        mat = motif.counts  # transpor.la
+        mat = motif.counts  # matriz de contagens
         for j in range(len(mat[0])):  # para colunas da matriz
             maxcol = mat[0][j]  # maxcolun é igual ao primeiro elemento da coluna
             for i in range(1,len(mat)):  # iniciando no segundo elemento da coluna j e compara todos os scores da coluna
@@ -68,7 +68,7 @@ class MotifFinding:
     def nextSol(self, s):
         nextS = [0] * len(s)  # gera lista s, com a posição das seqs em que está a começar a formação dos motifs
         pos = len(s) - 1  # comprimento da lista s -1
-        while pos >= 0 and s[pos] == self.seqSize(pos) - self.motifSize: #até pos diminuir
+        while pos >= 0 and s[pos] == self.seqSize(pos) - self.motifSize: #até pos diminuir para while quanbdo diferente de 0
             pos -= 1
         if (pos < 0):nextS = None  # quando s tem size 0 devolve none
         else:
@@ -82,7 +82,7 @@ class MotifFinding:
     def exhaustiveSearch(self):
         melhorScore = -1
         res = []
-        s = [0] * len(self.seqs)  # lista de 0 com o numero de seqs na lista self.seqs
+        s = [0] * len(self.seqs)  # lista de 0, ira representar os indexs nas sequencias
         while (s != None):
             sc = self.score(s)  # Score para as posições
             if (sc > melhorScore):  # verificar o melhor score e se true alterar
@@ -99,7 +99,7 @@ class MotifFinding:
             for i in range(len(s)):
                 res.append(s[i])
             res.append(0)
-        else:  # bypass
+        else:  # bypass para a folha do proximo
             pos = len(s) - 1
             while pos >= 0 and s[pos] == self.seqSize(pos) - self.motifSize:  # while para as posições e se condição se mantem
                 pos -= 1
@@ -112,10 +112,11 @@ class MotifFinding:
     def bypass(self,s):  # verificar se já esta nas ultimas letras de seq, se chegou vai altera para 0 e acrescenta
         res = []
         pos = len(s) - 1
-        while pos >= 0 and s[pos] == self.seqSize(pos) - self.motifSize:pos -= 1
+        while pos >= 0 and s[pos] == self.seqSize(pos) - self.motifSize: pos -= 1
         if pos < 0: res = None
         else:
-            for i in range(pos): res.append(s[i])
+            for i in range(pos):
+                res.append(s[i])
             res.append(s[pos] + 1)
         return res
 
@@ -123,11 +124,11 @@ class MotifFinding:
         melhorScore = -1
         melhorMotif = None
         size = len(self.seqs)
-        s = [0] * size  # lista s
+        s = [0] * size  # lista de 0, ira representar os indexs para cada sequencias
         while s != None:  # ate s não ficar vazio
             if len(s) < size:  # vericar que len s não é menor que size, senao fazer optimScore
                 optimScore = self.score(s) + (size - len(s)) * self.motifSize
-                if optimScore < melhorScore: #score melhor vai ao bypass
+                if optimScore < melhorScore: #otimo for menor vai ao bypass
                     s = self.bypass(s)
                 else: #senao next vertex
                     s = self.nextVertex(s)
@@ -158,7 +159,7 @@ class MotifFinding:
                 s[a] = melhorPosition
         return s
 
-    # Consensus (heuristic)
+    # Estocástico
 
     def heuristicStochastic(self):
         from random import randint
@@ -193,11 +194,11 @@ class MotifFinding:
         melhorscore = self.score(s)  # calcular o score de s
         bests = list(s)
         for it in range(iterations):
-            # Passo 2: selecionar uma das sequência aleatoriamente
+            # Passo 2: selecionar uma das sequência aleatoriamente para retirar
             seq_idx = randint(0, len(self.seqs) - 1)
             # Passo 3: criar um perfil que não contenha a sequência aleatória
             seq = self.seqs[seq_idx]  # indicar qual a seq que vai remover
-            s.pop(seq_idx)  # remover a posição correspondente a seq escolhida p
+            s.pop(seq_idx)  # remover a posição correspondente a seq escolhida a s (vetor de indexs)
             removed = self.seqs.pop(seq_idx)  # vai dar pop da seq a lista
             motif = self.createMotifFromIndexes(s)  # Criar o perfil sem a sequência
             motif.createPWM()
@@ -386,12 +387,12 @@ def testEX():
     print("Score:", mf.scoreEX(sol2))
 
 
-test1()
+#test1()
 print('-------------------')
-test2()
+#test2()
 print('-------------------')
-test3()
+#test3()
 print('-------------------')
 test4()
 print('-------------------')
-testEX()
+#testEX()

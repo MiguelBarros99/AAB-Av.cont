@@ -19,13 +19,13 @@ class MySeq:
     def printseq(self):
         print(self.seq)
     
-    def alfabeto(self):
+    def alfabeto(self):  #definir o alfaberto
         if (self.tipo=="dna"): return "ACGT"
         elif (self.tipo=="rna"): return "ACGU"
         elif (self.tipo=="protein"): return "ACDEFGHIKLMNPQRSTVWY"
         else: return None
     
-    def valida(self):
+    def valida(self): #verificar se entra no alfabeto
         alf = self.alfabeto()
         res = True
         i = 0
@@ -35,7 +35,7 @@ class MySeq:
             else: i += 1
         return res 
     
-    def validaER(self):
+    def validaER(self): #verificar segunddo escpressoes regulares
         import re
         if (self.tipo=="dna"):
             if re.search("[^ACTGactg]", self.seq) != None: return False
@@ -49,13 +49,13 @@ class MySeq:
             else: return True
         else: return False    
     
-    def transcricao (self):
+    def transcricao (self):  #trabceição
         if (self.tipo == "dna"):
             return MySeq(self.seq.replace("T","U"), "rna")
         else:
             return None
         
-    def compInverso(self):
+    def compInverso(self): #complemento inverso
         if (self.tipo != "dna"): return None
         comp = ""
         for c in self.seq:
@@ -69,7 +69,7 @@ class MySeq:
                 comp = "G" + comp
         return MySeq(comp)
 
-    def traduzSeq (self, iniPos= 0):
+    def traduzSeq (self, iniPos= 0): #traduzir sequencia
         if (self.tipo != "dna"): return None
         seqM = self.seq
         seqAA = ""
@@ -78,7 +78,7 @@ class MySeq:
             seqAA += self.traduzCodao(cod)
         return MySeq(seqAA, "protein")
 
-    def orfs (self):
+    def orfs (self):  #Orfs
         if (self.tipo != "dna"): return None
         res = []
         res.append(self.traduzSeq(0))
