@@ -4,7 +4,6 @@ class SuffixTree2:
         self.nodes = {0: (-1, {})}  # root node
         self.num = 0
 
-
     def print_tree(self):
         for k in self.nodes.keys():
             m,n = self.descompact(k)
@@ -23,7 +22,7 @@ class SuffixTree2:
 
     def add_node(self, origin, symbol, leafnum=-1):
         self.num += 1  # numero de nodulo adiciona
-        self.nodes[origin][1][symbol] = self.num  # 1 é para ir buscar o dicionario dentro do tuplo
+        self.nodes[origin][1][symbol] = self.num  # 1 é para ir buscar  dentro do tuplo no dicionario
         self.nodes[self.num] = (leafnum, {})  # construi o tuplo para o node a seguir
 
     def add_suffix(self, p, sufnum, seq):  # o -padrao , sufnum - i
@@ -148,7 +147,7 @@ class SuffixTree2:
         return f_match
 
 def test2():
-    seq1 = "GADGGFGGGGGGGGGHLDHOFOIGJKCTA"
+    seq1 = "GADDGFGGGGGGGGGHLDHOFOIGJKCTA"
     seq2 = "TAAGADGGFGGGGGGGGGHLDHOFOIGJKCTA"
     st = SuffixTree2()
     st.suffix_tree_from_seq(seq1,seq2)

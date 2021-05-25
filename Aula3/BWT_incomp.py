@@ -16,7 +16,7 @@ class BWT:
         res = ""
         for i in range(len(text)):
             res += ls[i][len(text) - 1]  # Percorrer a lista e para cada string vai buscar o último elemento da string
-        if buildsufarray:
+        if buildsufarray: #apenas se for true para o init
             self.sa = []
             for i in range(len(ls)):
                 stpos = ls[i].index("$") #indexação em relação ao $ para poder reconstruir
@@ -24,18 +24,18 @@ class BWT:
         return res
 
     def inverse_bwt(self):
-        firstcol = self.get_first_col()
+        firstcol = self.get_first_col()  #obter a 1 coluna para indexação
         res = ""
         c = "$" # o primeiro carater é sempre $
         occ = 1 # buscar a primeira ocorrencia
-        for i in range(len(self.bwt)): #percorre a matriz, no comprimento da bwt
-            pos = find_ith_occ(self.bwt, c, occ)
-            c = firstcol[pos]
+        for i in range(len(self.bwt)): #percorre a str da bwt (ultima coluna)
+            pos = find_ith_occ(self.bwt, c, occ) #indexação do $ no incio
+            c = firstcol[pos] #vai buscar a primeira coluna a que letra corresponde
             occ = 1
             k = pos - 1
-            while firstcol[k] == c and k >= 0:
+            while firstcol[k] == c and k >= 0: #serve para ver se quantos mais carateres desses ha na priemria comuna antes
                 occ += 1
-                k -= 1
+                k -= 1 #define o k e occ para o priximo for
             res += c
         return res
 
@@ -46,13 +46,13 @@ class BWT:
         firstcol.sort() #ordena segundo a ordem alfabetica
         return firstcol
 
-    def last_to_first(self):
+    def last_to_first(self): #ligação entre as duas colunas
         res = []
         firstcol = self.get_first_col()
         for i in range(len(firstcol)):
             c = self.bwt[i]
-            ocs = self.bwt[:i].count(c) + 1 #conta ocorrencias
-            res.append(find_ith_occ(firstcol, c, ocs))
+            ocs = self.bwt[:i].count(c) + 1 #conta ocorrencias desse carater até ao i (numero do carater)
+            res.append(find_ith_occ(firstcol, c, ocs))  #dou append ao res a occorencia na 1 coluna
         return res
 
     def bw_matching(self, patt):
@@ -62,14 +62,14 @@ class BWT:
         bottom = len(self.bwt) - 1
         flag = True
         while flag and top <= bottom:
-            if patt != "":
+            if patt != "": #se existir padrão
                 symbol = patt[-1]
                 patt = patt[:-1]
-                lmat = self.bwt[top:(bottom + 1)]
+                lmat = self.bwt[top:(bottom + 1)] #top e bottom usados para restringir na bwt
                 if symbol in lmat:
-                    topIndex = lmat.index(symbol) + top
-                    bottomIndex = bottom - lmat[::-1].index(symbol)
-                    top = lf[topIndex]
+                    topIndex = lmat.index(symbol) + top #index na bwt (1º index)
+                    bottomIndex = bottom - lmat[::-1].index(symbol) #index na bwt (ultima index com o sybolo
+                    top = lf[topIndex]  #index na bwt para o range da firstcol antes
                     bottom = lf[bottomIndex]
                 else:
                     flag = False
@@ -89,7 +89,7 @@ class BWT:
 
 # auxiliary
 
-def find_ith_occ(l, elem, index):
+def find_ith_occ(l, elem, index):   #index da x occorrencia na btw
     j, k = 0, 0
     while k < index and j < len(l):
         if l[j] == elem:

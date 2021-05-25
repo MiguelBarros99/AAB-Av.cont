@@ -15,7 +15,6 @@ class MyGraph:
         for v in self.graph.keys():  # para cada key no dicionario (vertice)
             print(v, " -> ", self.graph[v])  # para cada key no dicionario (vertice)
 
-
     def get_nodes(self):  # vai buscar os vetices(nos)
         ''' Returns list of nodes in the graph '''
         return list(self.graph.keys())  # devolve uma lista com os vertices

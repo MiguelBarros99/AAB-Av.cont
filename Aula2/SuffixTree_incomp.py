@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class SuffixTree:
+class SuffixTree:  #construtir arvore apartir dea sequencia
 
     def __init__(self):
         self.nodes = {0: (-1, {})}  # root node
@@ -22,7 +22,7 @@ class SuffixTree:
         while pos < len(p):  # seguir a sequencia no ciclo pos
             if p[pos] not in self.nodes[node][1].keys():  # se a letra na posição pos da seq p não tiver no dicionario no node
                 if pos == len(p) - 1:
-                    self.add_node(node, p[pos], sufnum)  # adiciona o node final/leaf se for o $.
+                    self.add_node(node, p[pos], sufnum)  # adiciona o node final/leaf se for o $. sufnum é o index i na seq original
                 else:
                     self.add_node(node, p[pos])  # adicionar ao node a letra p[pos]
             node = self.nodes[node][1][p[pos]]  # mudar de node, output é um numero
@@ -35,22 +35,22 @@ class SuffixTree:
 
     def find_pattern(self, pattern):
         node = 0
-        for pos in range(len(pattern)):
+        for pos in range(len(pattern)): #seguir as posições no padrao a pesquisa pela arvore
             if pattern[pos] in self.nodes[node][1].keys():  # se a letra tiver nas keys
                 node = self.nodes[node][1][pattern[pos]]  # seguir para o proximo node
-            else:
+            else:  # mal de missmatch da return de none para esse padrão
                 return None
         return self.get_leafes_below(node)
 
     def get_leafes_below(self, node):
         res = []
-        if self.nodes[node][0] >= 0:  # maior ou igual 0 é para verificar uma leaf
+        if self.nodes[node][0] >= 0:  # maior ou igual 0 é para verificar se é uma leaf
             res.append(self.nodes[node][0])  # adicionar o valor da leaf
         else:
             for k in self.nodes[node][1].keys():  # correr todas as keys no nodulo
                 newnode = self.nodes[node][1][k]  # mudar para o node
                 leafes = self.get_leafes_below(newnode)  # recursividade para seguir os ramos ate leaf
-                res.extend(leafes)  # concatenar a lista da recursiva
+                res.extend(leafes)  # concatenar a lista da recursiva (pode ter varias leafs)
         return res
 
     def nodes_below(self, node):
@@ -59,7 +59,7 @@ class SuffixTree:
         if nodes != []:
             for i in nodes: nodes.extend(list(self.nodes[i][1].values()))  # a lista vai aumentando (acrescenta a lista) conforme ele corre os nodulos
             return nodes
-        else:
+        else: # se o nodes for vazio
             return None
 
     def matches_prefix(self, prefix):

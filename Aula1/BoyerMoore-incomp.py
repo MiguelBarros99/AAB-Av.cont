@@ -7,7 +7,7 @@ class BoyerMoore:
         self.pattern = pattern
         self.preprocess()
 
-    def preprocess(self):
+    def preprocess(self):  #realizar as tabelas para BCR e para GSR
         self.process_bcr()
         self.process_gsr()
 
@@ -18,7 +18,7 @@ class BoyerMoore:
             self.occ[c] = -1
         for i in range(len(self.pattern)):
             c = self.pattern[i]  # altera no dicionario a letra no pattern para valor de i
-            self.occ[c] = i
+            self.occ[c] = i  #não é necessario o processo interio devodo a GSR
 
     def process_gsr(self):
         """Good Sufix rule"""
@@ -36,29 +36,30 @@ class BoyerMoore:
             j -= 1
             self.f[i] = j
         j = self.f[0]
-        for i in range(
-                len(self.pattern)):  # quando ta definido como 0 alterar para o valor de  j mais recente que significa passar o restante da cadeia.
+        for i in range(len(self.pattern)):  # quando ta definido como 0 alterar para o valor de  j mais recente que significa passar o restante da cadeia.
             if self.s[i] == 0: self.s[i] = j
             if i == j: j = self.f[j]
 
     def search_pattern(self, text):
         res = []
         i = 0  # POSIÇÃO NA SEQ INICIAL
-        while i <= (len(text) - len(self.pattern)):  # para começar a correr a sequencia
-            j = len(self.pattern) - 1
-            while j >= 0 and self.pattern[j] == text[j + i]:  # continuar a correr enquanto esta a dar match
+        while i <= (len(text) - len(self.pattern)):  # para começar a correr a sequencia e enquanto a posição na seq não ultrapassa o limite da search grid
+            j = len(self.pattern) - 1 #definir o tamnho do padrao
+            while j >= 0 and self.pattern[j] == text[j + i]:  # continuar a correr enquanto esta a dar match (direita para esquerda)
                 j -= 1
-            if j < 0:
+            if j < 0: # se j atingir valor -1(full match)
                 res.append(i)
                 i = i + self.s[0]  # avançar para i "casas" para a frente como j<0 significa que deu match com um padrão
             else:
-                c = text[i + j]
+                c = text[i + j]  #carater de missmatch
                 i += max(self.s[j + 1], j - self.occ[c])  # avançar uma sequencia dependo do GSR e BCR
         return res
 
 
 def test():
     bm = BoyerMoore("ACTG", "ACCA")
+    print(bm.occ)
+    print(bm.s)
     print(bm.search_pattern("ATAGAACCAATGAACCATGATGAACCATGGATACCCAACCACC"))
 
 

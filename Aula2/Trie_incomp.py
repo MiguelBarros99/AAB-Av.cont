@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class Trie:
+class Trie:  #construtir arvore apartir de padroes
 
     def __init__(self):
         self.nodes = {0: {}}  # dictionary
@@ -35,20 +35,20 @@ class Trie:
         while pos < len(text):
             if text[pos] in self.nodes[node].keys():
                 node = self.nodes[node][text[pos]]  # passar para o proximo node _ output é um numero
-                match += text[pos]
-                if self.nodes[node] == {}:
+                match += text[pos]  #adicionar a solução
+                if self.nodes[node] == {}: #atingiu uma leaf e so da return a match nesse caso
                     return match
                 else:
-                    pos += 1
+                    pos += 1 #seguir para a proxima posição
             else:  # senao tiver corre o ciclo e devolve none
                 return None
         return None
 
-    def trie_matches(self, text):
+    def trie_matches(self, text):  #tentar varias posições da seq
         res = []
         for i in range(len(text)):  # i vai ser a posição na sequencia text
             m = self.prefix_trie_match(text[i:])
-            if m != None: res.append((i, m))
+            if m != None: res.append((i, m))  #posição da sequencia que começou e m-> o match que foi dado
         return res
 
 
