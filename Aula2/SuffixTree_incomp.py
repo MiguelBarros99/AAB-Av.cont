@@ -57,24 +57,34 @@ class SuffixTree:  #construtir arvore apartir dea sequencia
         """Ficha exercicio 1 A"""
         nodes = list(self.nodes[node][1].values())  # vai buscar os valores do dicionario dos nodulos a seguir
         if nodes != []:
-            for i in nodes: nodes.extend(list(self.nodes[i][1].values()))  # a lista vai aumentando (acrescenta a lista) conforme ele corre os nodulos
+            for i in nodes:
+                nodes.extend(list(self.nodes[i][1].values()))  # a lista vai aumentando (acrescenta a lista) conforme ele corre os nodulos
             return nodes
         else: # se o nodes for vazio
             return None
 
     def matches_prefix(self, prefix):
         """Ficha exercicio 1 B"""
-        res = []
-        pos = self.find_pattern(prefix)  # local onde é encontrado o sufixo
-        orig = self.get_sequence()  # sequencia original
-        if pos != [] or None:
-            for i in pos:
-                hipoteses = len(orig) - i  # numero de hipoteses (compriemnto maximo)
-                dist = len(prefix)
-                while dist <= hipoteses:  # distâncias
-                    if orig[i:i + dist] not in res:
-                        res.append(orig[i:i + dist])
-                    dist += 1
+        res =[prefix,]
+        toviseted = []
+        pos = 0
+        node = 0
+        while pos < len(prefix)-1 and self.nodes[node][0] < 0:
+            if prefix[pos] in self.nodes[node][1].keys():
+                pos +=1
+                node = self.nodes[node][1][prefix[pos]]
+            else:
+                return None
+        for i in self.nodes[node][1].keys():
+            if i != '$': res.append(prefix+i)
+            toviseted.append((prefix+i, self.nodes[node][1][i]))
+        for i in toviseted:
+            sub, node = i
+            if self.nodes[node][0] < 0:
+                for j in self.nodes[node][1].keys():
+                    if j !='$':
+                        if sub+j not in res: res.append(sub+j)
+                        toviseted.append((sub+j, self.nodes[node][1][j]))
         return res
 
     def get_sequence(self):
@@ -118,6 +128,6 @@ def test2():
     print(st.matches_prefix("TA"))
 
 
-test()
+#test()
 print()
 test2()
