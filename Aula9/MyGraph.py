@@ -56,8 +56,7 @@ class MyGraph:
     ## successors, predecessors, adjacent nodes
 
     def get_successors(self, v):
-        return list(
-            self.graph[v])  # needed to avoid list being overwritten of result of the function is used
+        return list(self.graph[v])  # needed to avoid list being overwritten of result of the function is used
 
     def get_predecessors(self, v):
         pre = []  # abrir lista de antecessor
@@ -89,6 +88,22 @@ class MyGraph:
     def degree(self, v):  # O grau de um vértice e dado pelo numero de arestas que lhe sao incidentes
         # self.get_adjacents(v) -> ver os sucessores e os predecessores para dar lsita de arestas
         return len(self.get_adjacents(v))  # contar as arestas da lista
+
+    def mean_degree(self, deg_type = "inout"):
+        degs = self.all_degrees(deg_type)
+        return sum(degs.values()) / float(len(degs))
+
+    def prob_degree(self, deg_type = "inout"):
+        degs = self.all_degrees(deg_type)
+        res = {}
+        for k in degs.keys():
+            if degs[k] in res.keys():
+                res[degs[k]] += 1
+            else:
+                res[degs[k]] = 1
+        for k in res.keys():
+            res[k] /= float(len(degs))
+        return res
 
     def all_degrees(self, deg_type="inout"):  # tudo o que sai e tudo o que entra
         ''' Cálculo de graus de entrada e saída (ou ambos) para todos os nós da rede.
