@@ -62,19 +62,42 @@ class DeBruijnGraph (MyGraph):
                 Frags[i] = 1
         for frag in Frags.keys():
             if Frags[frag] ==1:
-                for otherfrag in  Frags.keys():
+                for otherfrag in Frags.keys():
                     if otherfrag != frag and Frags[otherfrag] >= 2:
                         pos = 0
                         x= 0
-                        while x > 1 and pos < len(otherfrag) - 1:
+                        while x < 2 and pos < len(otherfrag) - 1:
                             if otherfrag[pos] == frag[pos]:
                                 pos +=1
                             else: x +=1
                         if x ==1: Erro.append(frag)
         return Erro
 
+    def tries_DeBruijn(frags):
+        # try with original size
+        dbgr = DeBruijnGraph(frags)
+        nb = dbgr.check_nearly_balanced_graph()
+        if (nb[0] is not None and nb[1] is not None):
+            p = dbgr.eulerian_path()
+            return dbgr.seq_from_path(p)
+        k = len(frags[0])  # assuming all of the same size (not tested)
+        while (k >= 2):
+            nfrags = []
+            for f in frags:
+                nf = composition(k, f)
+                nfrags.extend(nf)
+            dbgr = DeBruijnGraph(nfrags)
+            nb = dbgr.check_nearly_balanced_graph()
+            if (nb[0] is not None and nb[1] is not None):
+                p = dbgr.eulerian_path()
+                return dbgr.seq_from_path(p)
+            else:
+                k -= 1
+        return None
+
 def suffix (seq): 
     return seq[1:]
+
     
 def prefix(seq):
     return seq[:-1]

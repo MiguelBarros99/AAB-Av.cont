@@ -423,6 +423,41 @@ class MyGraph:
         path = cycle[i+1:] + cycle[1:i+1]
         return path
 
+    def graph_components(self):
+        if not self.is_connected() or not self.check_balanced_graph():
+            return None
+        edges_visit = list(self.get_edges())  # lista com os arcos do grafo
+        res = []  # abrir lista para ciclo
+        while edges_visit:  # enquanto o edges_visit tiver elementos(??)
+            pair = edges_visit[0]  # primeiro arco
+            i = 1  # contagem
+            if res != []:  # se o res nao estiver vazio
+                while pair[0] not in res[
+                    len(res) - 1]:  # se o primeiro arco nao estiver em res (ou seja, nao estiver 'coberto')
+                    pair = edges_visit[i]  # vai buscar o arco i
+                    i = i + 1  # somar 1 ao i
+            edges_visit.remove(pair)  # remover o arco
+            start, nxt = pair
+            cycle = [start, nxt]
+            while nxt != start:  # constroi os varios ciclos
+                for suc in self.graph[nxt]:
+                    if (nxt, suc) in edges_visit:
+                        pair = (nxt, suc)
+                        nxt = suc
+                        cycle.append(nxt)
+                        edges_visit.remove(pair)
+            res.append(cycle)
+        return res
+
+    def graph_components_cenas(self):
+        components = self.graph_components()
+        organizes_components = sorted(components, key=len, reverse=True)
+        for i in organizes_components:
+            m = tries_DeBruijn(i)
+            if m == None:
+                pass
+            else:
+                return m
 
 def is_in_tuple_list(tl, val):
     res = False

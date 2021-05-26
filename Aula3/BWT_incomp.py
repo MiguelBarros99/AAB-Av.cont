@@ -13,6 +13,7 @@ class BWT:
         for i in range(len(text)): #dollar ja incluido na sequencia
             ls.append(text[i:] + text[:i])
         ls.sort() #sorted por ordem alfabetica
+        print(ls)
         res = ""
         for i in range(len(text)):
             res += ls[i][len(text) - 1]  # Percorrer a lista e para cada string vai buscar o último elemento da string
@@ -100,11 +101,11 @@ def find_ith_occ(l, elem, index):   #index da x occorrencia na btw
 
 
 def test():
-    seq = "TAGACAGAGA$"
+    seq = "ctttaaacc$"
     bw = BWT(seq)
     print(bw.bwt)
-    print(bw.last_to_first())
-    print(bw.bw_matching("AGA"))
+    #print(bw.last_to_first())
+    #print(bw.bw_matching("AGA"))
 
 
 def test2():
@@ -121,6 +122,6 @@ def test3():
 
 
 test()
-test2()
-test3()
+#test2()
+#test3()
 
