@@ -6,6 +6,7 @@ class DeBruijnGraph (MyGraph):
     
     def __init__(self, frags):
         MyGraph.__init__(self, {})
+        self.frags = frags
         self.create_deBruijn_graph(frags)
 
     def add_edge(self, o, d):
@@ -35,8 +36,47 @@ class DeBruijnGraph (MyGraph):
         for i in range(1,len(path)):
             nxt = path[i]
             seq += nxt[-1]
-        return seq 
-    
+        return seq
+
+    def split_frags(self,k):
+        frags_splted = []
+        for i in self.frags:
+            for start in range(len(i)):
+                frags_splted.append(i[start:start+k+i])
+        return frags_splted
+
+    def Grapf_Splited(self,k):
+        frags_splted = self.split_frags(k)
+        dbgr = DeBruijnGraph(frags_splted)
+        dbgr.print_graph()
+        dbgr.check_nearly_balanced_graph()
+        path = dbgr.eulerian_path()
+        return path
+
+    def fragmentosErro (self, listaFragmentos):
+        Frags = {}
+        Erro = []
+        for i in listaFragmentos:
+            if i in Frags:
+                Frags[i] +=1
+            else:
+                Frags[i] = 1
+        for frag in Frags.keys():
+            if Frags[frag] ==1 :
+                for otherfrag in  Frags.keys():
+                    if otherfrag != frag and Frags[otherfrag] => 2:
+                        pos = 0
+                        x= 0
+                        while x > 1 and pos < len(otherfrag) - 1:
+                            if otherfrag[pos] == frag[pos]:
+                                pos +=1
+                            else: x +=1
+                        if x ==1: Erro.append(frag)
+
+
+
+
+
 def suffix (seq): 
     return seq[1:]
     
@@ -51,7 +91,6 @@ def composition(k, seq):
     return res
 
 
-
 def test1():
     frags = [ "ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     dbgr = DeBruijnGraph(frags)
@@ -62,8 +101,8 @@ def test2():
     frags = [ "ATA", "ACC", "ATG", "ATT", "CAT", "CAT", "CAT", "CCA", "GCA", "GGC", "TAA", "TCA", "TGG", "TTC", "TTT"]
     dbgr = DeBruijnGraph(frags)
     dbgr.print_graph()
-    print (dbgr.check_nearly_balanced_graph())
-    print (dbgr.eulerian_path())
+    print(dbgr.check_nearly_balanced_graph())
+    print(dbgr.eulerian_path())
 
 
 def test3():

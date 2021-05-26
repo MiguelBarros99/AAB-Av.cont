@@ -229,6 +229,13 @@ class MyGraph:
                         total_sp += 1
                         if node in sp: sps_with_node += 1 
         return sps_with_node / total_sp
+
+    def all_betweenness_centrality(self):
+        Bc = {}
+        for k in self.graph.keys():
+            Bc[k] = self.betweenness_centrality(k)
+        ord_cl = sorted(list(Bc.items()), key=lambda x: x[1], reverse=True)
+        return list(map(ord_cl))
                     
     
     ## cycles    

@@ -190,12 +190,38 @@ class MyGraph:
             if self.node_has_cycle(v): return True
         return res
 
+    def isClique(self,listNodes):
+        for node in listNodes:
+            lista = self.get_adjacents(node)
+            for i in listNodes:
+                if i != node:
+                    if i not in lista:
+                        return False
+        return True
+
+    def eIsolado(self, idNo):
+        res = self.get_adjacents(idNo)
+        if res != None:
+            return False
+        else:
+            return True
+
+    def nosIsolados(self):
+        ress = []
+        for nodes in self.graph.keys():
+            res = self.eIsolado(nodes)
+            if res == True:
+                ress.append(nodes)
+
 
 def is_in_tuple_list (tl, val):
     res = False
     for (x,y) in tl:
         if val == x: return True
     return res
+
+
+
 
 
 def test1():
