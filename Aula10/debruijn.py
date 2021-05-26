@@ -61,7 +61,7 @@ class DeBruijnGraph (MyGraph):
             else:
                 Frags[i] = 1
         for frag in Frags.keys():
-            if Frags[frag] ==1 :
+            if Frags[frag] ==1:
                 for otherfrag in  Frags.keys():
                     if otherfrag != frag and Frags[otherfrag] >= 2:
                         pos = 0
@@ -71,6 +71,7 @@ class DeBruijnGraph (MyGraph):
                                 pos +=1
                             else: x +=1
                         if x ==1: Erro.append(frag)
+        return Erro
 
 def suffix (seq): 
     return seq[1:]
