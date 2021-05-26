@@ -221,9 +221,6 @@ def is_in_tuple_list (tl, val):
     return res
 
 
-
-
-
 def test1():
     gr = MyGraph( {1:[2], 2:[3], 3:[2,4], 4:[2]} )
     gr.print_graph()

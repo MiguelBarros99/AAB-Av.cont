@@ -10,8 +10,7 @@ class MetabolicNetwork(MyGraph):  # sub-classe da classe MyGraph (herança)-> de
         # split_rev-> diz se representa reações reversiveis ou não, ou seja, se nos mostra as reações reversiveis atraves do grafo
         # indica se se consideram as reações reversíveis como duas reações distintas, uma para cada direção (True) ou não (False)
         # Tipo de rede-> é o que lhe passarmos
-        MyGraph.__init__(self,
-                         {})  # chamar o construtor da classe MyGraph (classe maior) -> estamos a chama-lo com o dicionario vazio para construir o grafo
+        MyGraph.__init__(self,{})  # chamar o construtor da classe MyGraph (classe maior) -> estamos a chama-lo com o dicionario vazio para construir o grafo
         self.net_type = network_type  # tipo de rede: “metabolite-reaction”, “reaction”, “metabolite”
         self.node_types = {}  ##guarda dicionário indicando listas de nós de cada tipo (no caso de ser uma rede “metabolite-reaction” – grafo bipartido)
         if network_type == "metabolite-reaction":  # se for do tipo metabolito-reacao
@@ -114,6 +113,27 @@ class MetabolicNetwork(MyGraph):  # sub-classe da classe MyGraph (herança)-> de
                     if r != s1:  # se o r não for igual ao sucessor-sucessor
                         self.add_edge(r, s1)  # adicionar um arco de reações
 
+    def final_metabolites(self):
+        final_met = []
+        for node in self.node_types["metabolite"]:
+            if self.get_successors(node) < 1:
+                if self.get_predecessors(node) > 1 :
+                    final_met.append(node)
+        return final_met
+
+    def shortest_path_product(self, initial_metabolites, target_product):
+        res = []
+        for node in self.node_types["reaction"]:
+            approve = True
+            for i in self.get_predecessors(node):
+                if i not in initial_metabolites:
+                    approve = False
+            if approve == True:
+                res.append(self.shortest_path(node,target_product))
+        if res == [] : return None
+        else: return res
+
+
 
 def test1():
     m = MetabolicNetwork("metabolite-reaction")  # cria o tipo de rede
@@ -181,18 +201,19 @@ def test2():
 def test3():
     mrn = MetabolicNetwork("metabolite-reaction")
     mrn.load_from_file("ecoli.txt")
-    # mrn.print_graph()
+    #mrn.print_graph()
     # print("Reactions: ", mrn.get_nodes_type("reaction") )
     # print("Metabolites: ", mrn.get_nodes_type("metabolite") )
     # print()
+    print(mrn.high_deggres_nodes(mrn, 4))
     print(mrn.mean_degree("out"))
     d = mrn.prob_degree("out")  # dicionario
     for x in sorted(d.keys()):  # para cada key no dicionario d por ordem crescente
         print(x, 't', d[x])  # grau, tempo, value dessa key(grau)
 
 
-# test1()
+test1()
 print()
-# test2()
+test2()
 test3()
 
