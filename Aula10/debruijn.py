@@ -38,15 +38,14 @@ class DeBruijnGraph (MyGraph):
             seq += nxt[-1]
         return seq
 
-    def split_frags(self,k):
+    def split_frags(self,k,seq):
         frags_splted = []
-        for i in self.frags:
-            for start in range(len(i)):
-                frags_splted.append(i[start:start+k+i])
+        for start in range(len(seq)):
+            frags_splted.append(seq[start:start+k+1])
         return frags_splted
 
-    def Grapf_Splited(self,k):
-        frags_splted = self.split_frags(k)
+    def Grapf_Splited(self,k,seq):
+        frags_splted = self.split_frags(k,seq)
         dbgr = DeBruijnGraph(frags_splted)
         dbgr.print_graph()
         dbgr.check_nearly_balanced_graph()
@@ -64,7 +63,7 @@ class DeBruijnGraph (MyGraph):
         for frag in Frags.keys():
             if Frags[frag] ==1 :
                 for otherfrag in  Frags.keys():
-                    if otherfrag != frag and Frags[otherfrag] => 2:
+                    if otherfrag != frag and Frags[otherfrag] >= 2:
                         pos = 0
                         x= 0
                         while x > 1 and pos < len(otherfrag) - 1:
@@ -72,10 +71,6 @@ class DeBruijnGraph (MyGraph):
                                 pos +=1
                             else: x +=1
                         if x ==1: Erro.append(frag)
-
-
-
-
 
 def suffix (seq): 
     return seq[1:]
